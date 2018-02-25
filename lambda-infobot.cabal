@@ -1,0 +1,74 @@
+-- This file has been generated from package.yaml by hpack version 0.20.0.
+--
+-- see: https://github.com/sol/hpack
+--
+-- hash: dc4f6731306c0ffc26c20798dac3f2d2e97a6c80b8aab90bb4e8c080013ee627
+
+name:           lambda-infobot
+version:        0.1.0.0
+description:    Please see the README on Github at <https://github.com/Garmelon/lambda-infobot#readme>
+homepage:       https://github.com/Garmelon/lambda-infobot#readme
+bug-reports:    https://github.com/Garmelon/lambda-infobot/issues
+author:         Joscha Mennicken
+maintainer:     joscha@migejolise.de
+copyright:      Joscha Mennicken
+license:        BSD3
+license-file:   LICENSE
+build-type:     Simple
+cabal-version:  >= 1.10
+
+extra-source-files:
+    ChangeLog.md
+    README.md
+
+source-repository head
+  type: git
+  location: https://github.com/Garmelon/lambda-infobot
+
+library
+  hs-source-dirs:
+      src
+  build-depends:
+      base >=4.7 && <5
+    , euph-api
+    , hslogger
+    , stm
+    , text
+  exposed-modules:
+      InfoBot
+  other-modules:
+      Paths_lambda_infobot
+  default-language: Haskell2010
+
+executable lambda-infobot-exe
+  main-is: Main.hs
+  hs-source-dirs:
+      app
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      base >=4.7 && <5
+    , euph-api
+    , hslogger
+    , lambda-infobot
+    , stm
+    , text
+  other-modules:
+      Paths_lambda_infobot
+  default-language: Haskell2010
+
+test-suite lambda-infobot-test
+  type: exitcode-stdio-1.0
+  main-is: Spec.hs
+  hs-source-dirs:
+      test
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      base >=4.7 && <5
+    , euph-api
+    , hslogger
+    , lambda-infobot
+    , stm
+    , text
+  other-modules:
+      Paths_lambda_infobot
+  default-language: Haskell2010

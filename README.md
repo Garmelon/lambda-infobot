@@ -1,1 +1,1 @@
-# euph-infobot
+# lambda-infobot
