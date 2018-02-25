@@ -21,6 +21,10 @@ description:         Please see the README on Github at <https://github.com/Garm
 
 dependencies:
 - base >= 4.7 && < 5
+- euph-api
+- hslogger
+- stm
+- text
 
 library:
   source-dirs: src
