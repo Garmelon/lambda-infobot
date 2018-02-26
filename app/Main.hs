@@ -9,13 +9,13 @@ import           System.Environment
 import           System.IO
 
 import           Control.Concurrent.STM
-import qualified Data.Text                 as T
-import qualified EuphApi                   as E
-import qualified EuphApi.Utils.Listing     as EL
-import qualified System.Log.Formatter      as LF
-import qualified System.Log.Handler        as LH
-import qualified System.Log.Handler.Simple as LH
-import qualified System.Log.Logger         as L
+import qualified EuphApi                    as E
+import qualified EuphApi.Utils.DetailedHelp as E
+import qualified EuphApi.Utils.Listing      as EL
+import qualified System.Log.Formatter       as LF
+import qualified System.Log.Handler         as LH
+import qualified System.Log.Handler.Simple  as LH
+import qualified System.Log.Logger          as L
 
 import           InfoBot
 
@@ -29,8 +29,8 @@ type Command = E.Command   BotSpecific ConnectionSpecific
  - Commands
  -}
 
-recountCommand :: Command
-recountCommand = E.specificCommand "recount" $ \msg -> do
+recountAction :: E.Message -> Bot ()
+recountAction msg = do
   lVar <- E.getConnectionInfo
   myID <- E.sessSessionID <$> E.getOwnView
   list <- E.who
@@ -39,25 +39,54 @@ recountCommand = E.specificCommand "recount" $ \msg -> do
   void $ E.nick $ nameFromListing l
   void $ E.replyTo msg "Recalibrated!"
 
-myHelp :: T.Text -> T.Text
-myHelp name =
+myHelp :: Command
+myHelp = E.helpCommand $ \n ->
   "Displays information about the clients in a room in its nick:\n\
-  \(<people>P <bots>B <lurkers>L <bot-lurkers>N)\n\
-  \!recount " <> E.atMention name <> " - recalibrates the bot\n\n\
-  \Created by @Garmy using https://github.com/Garmelon/EuphApi.\n"
+  \(<people>P <bots>B <lurkers>L <bot-lurkers>N)\n\n\
+  \!recount " <> E.atMention n <> " - Recount people in the room\n\n\
+  \Created by @Garmy using EuphApi.\n\
+  \For additional info, try \"!help " <> E.atMention n <> " <topic>\". Topics are:\n\
+  \count, lurkers, changelog"
+
+
+myDetailedHelp :: Command
+myDetailedHelp = E.detailedHelpCommand
+  [ ("count", \_ ->
+      "This bot counts the number of clients connected to a room.\
+      \ If you open a room in two different tabs, the bot counts you twice.\n\
+      \The euphoria client, on the other hand, usually displays all connections\
+      \ of an account as one nick in the nick list. \
+      \ Because of that, this bot's count is always as high as, or higher than,\
+      \ the number of nicks on the nick list, similar to the number on the button\
+      \ to toggle the nick list.\n\n\
+      \If the bot's count is off, try a !recount."
+    )
+  , ("lurkers", \_ ->
+      "People or bots who are connected to the room but haven't chosen a nick are lurkers.\
+      \ The euphoria client doesn't display them in the nick list.\n\
+      \This bot differentiates between people (L) and bots (N) who are lurking."
+    )
+  , ("changelog", \_ ->
+      "<2018-02-26> Port bot to EuphApi\n\
+      \<2017-10-22> Add !recount command\n\
+      \<2017-10-22> Fix bot counting incorrectly"
+    )
+  ]
 
 myCommands :: [Command]
 myCommands =
-  [ E.pingCommand "Pong!"
+  [ E.pingCommand        "Pong!"
   , E.generalPingCommand "Pong!"
-  , E.helpCommand myHelp
   , E.generalHelpCommand (const "I show how many people, bots, lurkers etc. are online.")
   , E.uptimeCommand
-  , E.generalUptimeCommand -- most bots don't do this
+  , E.generalUptimeCommand
   , E.killCommand "Bye!"
   , E.restartCommand "brb"
+  , myHelp
+  , myDetailedHelp
   -- non-botrulez commands
-  , recountCommand
+  , E.command         "recount" recountAction
+  , E.specificCommand "recount" recountAction
   ]
 
 {-
