@@ -67,7 +67,7 @@ myCommands =
 myBotHandler :: E.EventType -> Bot ()
 myBotHandler (E.EuphEvent e) = do
   -- run commands
-  E.autorunCommands myCommands e
+  E.runCommands myCommands e
   -- update listing
   lVar <- E.getConnectionInfo
   EL.update lVar e
