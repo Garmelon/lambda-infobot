@@ -1,8 +1,8 @@
--- This file has been generated from package.yaml by hpack version 0.20.0.
+-- This file has been generated from package.yaml by hpack version 0.28.2.
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: dc4f6731306c0ffc26c20798dac3f2d2e97a6c80b8aab90bb4e8c080013ee627
+-- hash: 49bec0c9a24472e04ae1b2e4f796dec4da0d3c81b32f9aa9bd75f5d221f354e3
 
 name:           lambda-infobot
 version:        0.1.0.0
@@ -16,7 +16,6 @@ license:        BSD3
 license-file:   LICENSE
 build-type:     Simple
 cabal-version:  >= 1.10
-
 extra-source-files:
     ChangeLog.md
     README.md
